@@ -1,28 +1,30 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState } from 'react';
+import { SafeAreaView, Text, StyleSheet } from 'react-native';
+import FilePicker from './components/FilePicker';
+import StreamServer from './components/StreamServer';
+import QRLink from './components/QRLink';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+const App = () => {
+  const [fileUri, setFileUri] = useState<string | null>(null);
+  const [streamUrl, setStreamUrl] = useState<string | null>(null);
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.header}>🎬 StreamMe - Local Movie Streamer</Text>
+      <FilePicker onPick={setFileUri} />
+      {fileUri && <StreamServer fileUri={fileUri} onServerStarted={setStreamUrl} />}
+      {streamUrl && <QRLink url={streamUrl} />}
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1, padding: 20, backgroundColor: '#111', alignItems: 'center'
   },
+  header: {
+    fontSize: 20, color: '#fff', marginBottom: 20
+  }
 });
 
 export default App;
